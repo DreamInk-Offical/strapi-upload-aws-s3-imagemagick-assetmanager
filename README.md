@@ -1,0 +1,144 @@
+# strapi-upload-aws-s3-sharp
+
+## Links
+
+- [Strapi website](https://strapi.io/)
+- [Strapi documentation](https://docs.strapi.io)
+- [Strapi community on Discord](https://discord.strapi.io)
+- [Strapi news on Twitter](https://twitter.com/strapijs)
+
+## Used modules
+- [upload-aws-s3](https://github.com/strapi/strapi/tree/main/packages/providers/upload-aws-s3)
+- [strapi-provider-upload-aws-s3-resizing-and-optimisation](https://github.com/YegorShtonda/strapi-provider-upload-aws-s3-resizing-and-optimisation)
+
+## Installation
+
+```bash
+# using npm
+npm install https://github.com/DreamInk-Offical/strapi-upload-aws-s3-sharp.git --save
+```
+
+## Configuration
+
+- `provider` defines the name of the provider
+- `providerOptions` is passed down during the construction of the provider. (ex: `new AWS.S3(config)`). [Complete list of options](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#constructor-property)
+- `actionOptions` is passed directly to the parameters to each method respectively. You can find the complete list of [upload/ uploadStream options](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property) and [delete options](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#deleteObject-property)
+
+See the [documentation about using a provider](https://docs.strapi.io/developer-docs/latest/plugins/upload.html#using-a-provider) for information on installing and using a provider. To understand how environment variables are used in Strapi, please refer to the [documentation about environment variables](https://docs.strapi.io/developer-docs/latest/setup-deployment-guides/configurations/optional/environment.html#environment-variables).
+
+- `optimizeOptions` can be found [here](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#constructor-property)
+- `resizeOptions` can be found [here](https://sharp.pixelplumbing.com/api-resize)
+
+### Provider Configuration
+
+`./config/plugins.js`
+
+```js
+module.exports = ({ env }) => ({
+  // ...
+  upload: {
+    config: {
+        provider: 'strapi-upload-aws-s3-sharp',
+        providerOptions: {
+            accessKeyId: env('AWS_ACCESS_KEY_ID'),
+            secretAccessKey: env('AWS_ACCESS_SECRET'),
+            region: env('AWS_REGION'),
+            endpoint: env('WASABI_ENDPOINT'), // e.g. "s3.fr-par.scw.cloud" (if s3 compatible service)
+            params: {
+                Bucket: env('AWS_BUCKET'),
+            },
+        },
+        actionOptions: {
+            upload: {},
+            uploadStream: {},
+            delete: {},
+        },
+        optimizeOptions: {
+            jpeg: {
+                quality: 90,
+                progressive: true,
+            },
+            png: {
+                quality: 90,
+                progressive: true,
+            }
+        },
+        imageSizes: [
+          {
+            name: 'large',
+            resizeOptions: {
+              width: 1400,
+              height: 1000, 
+              fit: 'cover',
+
+            }
+          },
+          {
+            name: 'medium',
+            resizeOptions: {
+              width: 1000,
+              withoutEnlargement: true,
+            }
+          }          
+        ],
+    },
+  },
+  // ...
+});
+```
+
+
+### Security Middleware Configuration
+
+Due to the default settings in the Strapi Security Middleware you will need to modify the `contentSecurityPolicy` settings to properly see thumbnail previews in the Media Library. You should replace `strapi::security` string with the object bellow instead as explained in the [middleware configuration](https://docs.strapi.io/developer-docs/latest/setup-deployment-guides/configurations/required/middlewares.html#loading-order) documentation.
+
+`./config/middlewares.js`
+
+```js
+module.exports = [
+  // ...
+  {
+    name: 'strapi::security',
+    config: {
+      contentSecurityPolicy: {
+        useDefaults: true,
+        directives: {
+          'connect-src': ["'self'", 'https:'],
+          'img-src': [
+            "'self'",
+            'data:',
+            'blob:',
+            'dl.airtable.com',
+            'yourBucketName.s3.yourRegion.amazonaws.com',
+          ],
+          'media-src': [
+            "'self'",
+            'data:',
+            'blob:',
+            'dl.airtable.com',
+            'yourBucketName.s3.yourRegion.amazonaws.com',
+          ],
+          upgradeInsecureRequests: null,
+        },
+      },
+    },
+  },
+  // ...
+];
+```
+
+If you use dots in your bucket name, the url of the ressource is in directory style (`s3.yourRegion.amazonaws.com/your.bucket.name/image.jpg`) instead of `yourBucketName.s3.yourRegion.amazonaws.com/image.jpg`. Then only add `s3.yourRegion.amazonaws.com` to img-src and media-src directives.
+
+## Required AWS Policy Actions
+
+These are the minimum amount of permissions needed for this provider to work.
+
+```json
+"Action": [
+  "s3:PutObject",
+  "s3:GetObject",
+  "s3:ListBucket",
+  "s3:DeleteObject",
+  "s3:PutObjectAcl"
+],
+```
