@@ -8,13 +8,13 @@
 - [Strapi news on Twitter](https://twitter.com/strapijs)
 
 ## Installation
-```
 # this plugin uses imagemagick cli. It could happen that some cli commands need to be adapted based on your operation system
 # install imagemagick (used: ImageMagick-7.1.0-46-Q16-HDRI-x64-dll)
+```
 https://imagemagick.org/script/download.php
 ```
-```
 # using npm
+```
 npm install https://github.com/DreamInk-Offical/strapi-upload-aws-s3-imageMagick.git --save
 ```
 
