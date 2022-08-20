@@ -1,4 +1,4 @@
-# strapi-upload-aws-s3-imageMagick
+# strapi-upload-aws-s3-imagemagick
 
 ## Links
 
@@ -15,7 +15,7 @@ install imagemagick (used: ImageMagick-7.1.0-46-Q16-HDRI-x64-dll)
 
 Using npm
 ```
-npm install https://github.com/DreamInk-Offical/strapi-upload-aws-s3-imageMagick.git --save
+npm install https://github.com/DreamInk-Offical/strapi-upload-aws-s3-imagemagick.git --save
 ```
 
 ## Configuration
