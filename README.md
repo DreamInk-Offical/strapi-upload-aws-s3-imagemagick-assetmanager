@@ -1,15 +1,5 @@
 # strapi-upload-aws-s3-imagemagick
 
-## Bugs
-When creating images with the uploadStream() function, this error occures: (Internal Server Error)
-```
-error: ENOTEMPTY: directory not empty, rmdir 'C:\Users\justu\AppData\Local\Temp\strapi-upload-F0UuAB'
-Error: ENOTEMPTY: directory not empty, rmdir 'C:\Users\justu\AppData\Local\Temp\strapi-upload-F0UuAB'
-```
-Seems to have something to do with fs.writeFile, but with the upload() function everything works as expected 
--> Even when the error occures upload will still work etc.
-
-
 ## Links
 
 - [Strapi website](https://strapi.io/)
