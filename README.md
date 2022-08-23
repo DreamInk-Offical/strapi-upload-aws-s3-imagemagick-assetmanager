@@ -72,6 +72,19 @@ module.exports = ({ env }) => ({
   // ...
 });
 ```
+### API Parameters
+`/api/upload`
+- [Strapi uploads](https://docs.strapi.io/developer-docs/latest/plugins/upload.html#examples)
+
+| Parameter | Description |
+| --- | --- |
+| `files` | The file(s) to upload. The value(s) can be a Buffer or Stream. |
+| `path (optional)` | The folder where the file(s) will be uploaded (json string - {"upload_path": "assets/id_123123"}. |
+| `path (imageSizes)` | Specify image sizes (json string - {"upload_path": "assets/id_123123", "imageSizes": "8k,4k,2k"}. |
+| `refId` | The ID of the entry which the file(s) will be linked to. |
+| `ref` | The unique ID (uid) of the model which the file(s) will be linked to (see more below). |
+| `source (optional)` | The name of the plugin where the model is located. |
+| `field` | The field of the entry which the file(s) will be precisely linked to. |
 
 
 ### Security Middleware Configuration
