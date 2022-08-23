@@ -38,7 +38,7 @@ module.exports = ({ env }) => ({
   // ...
   upload: {
     config: {
-      provider: 'strapi-upload-aws-s3-imageMagick',
+      provider: 'strapi-upload-aws-s3-imageMagick-assetmanager',
       providerOptions: {
         accessKeyId: env('WASABI_ACCESS_KEY_ID'),
         secretAccessKey: env('WASABI_ACCESS_SECRET'),
