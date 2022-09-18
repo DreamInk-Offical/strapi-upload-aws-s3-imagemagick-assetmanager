@@ -6,6 +6,7 @@
 - [Strapi documentation](https://docs.strapi.io)
 - [Strapi community on Discord](https://discord.strapi.io)
 - [Strapi news on Twitter](https://twitter.com/strapijs)
+- [Upscale AI](https://github.com/xinntao/Real-ESRGAN)
 
 ## Installation
 
